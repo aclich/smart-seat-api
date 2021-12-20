@@ -112,3 +112,4 @@ idea/
 */test.db
 
 .vscode/
+model.py
