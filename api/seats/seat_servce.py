@@ -63,12 +63,9 @@ class APISmartSeat(Resource):
                                      .filter(SensorSeat.id == c_id) \
                                      .first()
             if seat_q is None:
-                raise Exception('發生錯誤,查無此坐墊!')
+                raise error.NOT_FOUND_404('發生錯誤,查無此坐墊!')
             if seat_q.user_id != session.user_id:
                 raise Exception('Not your seats!!')
-            seat_data['seat_type'] = self.sql_session.query(SeatCategory)\
-                                         .filter(SeatCategory.type_name == seat_data['seat_type']) \
-                                         .first().c_id
 
             if all([seat_data['seat_name'] == seat_q.seat_name,
                     seat_data['seat_type'] == seat_q.seat_type,
@@ -112,7 +109,7 @@ class APISmartSeat(Resource):
             if seat_q is None:
                 return error.NOT_FOUND_404('Not Your Sensor!')
             del_record: int = self.sql_session.query(SensorRecord) \
-                                  .filter(SensorRecord.sensor_id == seat_id)\
+                                  .filter(SensorRecord.seat_id == seat_id)\
                                   .delete()
             del_seat: int = self.sql_session.query(SensorSeat) \
                                             .filter(SensorSeat.id == seat_id) \
@@ -124,7 +121,7 @@ class APISmartSeat(Resource):
 
         except Exception as e:
             self.sql_session.rollback()
-            message, code, err_msg = 'failed', 409, f'{e}'
+            message, code, err_msg = 'failed', 500, f'{e}'
 
         return {'message': message, 'data': '', 'err_msg': err_msg}, code
 
@@ -138,12 +135,14 @@ class GetTypeList(Resource):
     def get(self):
         query_list: List[SeatCategory] = self.sql_session.query(SeatCategory).all()
         type_list = [{'value': '', 'text': '請選擇型號...'}]
+        type_map = {}
         for q in query_list:
+            type_map[q.c_id] = q.type_name
             type_list.append(
                 {'value': q.c_id, 'text': f"{q.type_name}型"}
             )
-        return {'message': 'success', 'data': type_list}, 200
-
-
-    
-    
+        res = {
+            "type_list": type_list,
+            "type_map": type_map
+        }
+        return {'message': 'success', 'data': res}, 200

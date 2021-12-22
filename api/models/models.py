@@ -8,7 +8,7 @@ from sqlalchemy.sql.schema import MetaData
 from api.conf.token import jwt
 from api.database.database import db
 
-from sqlalchemy import Column, DateTime, ForeignKey, Index, String, text
+from sqlalchemy import Column, DateTime, ForeignKey, Index, String, text, Enum
 from sqlalchemy.dialects.mysql import INTEGER
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -71,38 +71,6 @@ class User(db.Model):
         except Exception as e:
             raise ValueError(f"Token error as {e}")
 
-
-    # Generates a new access token from refresh token.
-    # @staticmethod
-    # @auth.verify_token
-    # def verify_auth_token(token):
-
-    #     # Create a global none user.
-    #     g.user = None
-
-    #     try:
-    #         # Load token.
-    #         data = jwt.loads(token)
-
-    #     except:
-    #         # If any error return false.
-    #         return False
-
-    #     # Check if email and admin permission variables are in jwt.
-    #     if "email" and "admin" in data:
-
-    #         # Set email from jwt.
-    #         g.user = data["email"]
-
-    #         # Set admin permission from jwt.
-    #         g.admin = data["admin"]
-
-    #         # Return true.
-    #         return True
-
-    #     # If does not verified, return false.
-    #     return False
-
     def __repr__(self):
 
         # This is only for representation how you want to see user information after query.
@@ -154,11 +122,14 @@ class SensorRecord(db.Model):
     __tablename__ = 'sensor_record'
 
     id = Column(INTEGER, primary_key=True)
-    sensor_id = Column(ForeignKey('sensor_seats.id'), nullable=False, index=True)
+    seat_id = Column(ForeignKey('sensor_seats.id'), nullable=False, index=True)
+    seat_type = Column(ForeignKey('seat_category.c_id'), nullable=False, index=True)
     data = Column(String(255), nullable=False)
+    sitting_posture = Column(Enum('regular', 'bias_left', 'bias_right', 'cross_left', 'corss_right', 'stand_on'))
     created = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"), comment='Data created time')
 
-    sensor = relationship('SensorSeat')
+    seat = relationship('SensorSeat')
+    seat_category = relationship('SeatCategory')
 
 class SeatCategory(db.Model):
     __tablename__ = 'seat_category'
@@ -177,8 +148,6 @@ def query_to_dict(query: MetaData):
         value = getattr(query, c.name, None)
         if isinstance(value, datetime):
             value = datetime.strftime(value, '%Y-%m-%d %H:%M:%S')
-        if c.name == 'seat_type':
-            value = SeatCategory.get_seat_type_name(c_id=value)
         res_dict.setdefault(c.name, value)
     return res_dict
 
