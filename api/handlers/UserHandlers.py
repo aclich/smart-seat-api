@@ -140,8 +140,8 @@ class Login(Resource):
         }
 
         resp = make_response(json.dumps(data))
-        resp.set_cookie(key="access_token", value=access_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
-        resp.set_cookie(key="refresh_token", value=refresh_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
+        resp.set_cookie(key="access_token", secure=True, samesite=None, value=access_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
+        resp.set_cookie(key="refresh_token", secure=True, samesite=None, value=refresh_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
         # resp.data = json.dumps(data)
         return resp
         # return {
