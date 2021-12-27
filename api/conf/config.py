@@ -23,4 +23,5 @@ SQL_HOST = os.environ['SQL_HOST']
 SQL_PORT = os.environ['SQL_PORT']
 SQL_USER = os.environ['SQL_USER']
 SQL_PASSWD = os.environ['SQL_PASSWD']
-SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{SQL_USER}:{SQL_PASSWD}@{SQL_HOST}:{SQL_PORT}/{DB_NAME}'
+SQL_CONF = os.environ['SQL_CONF']
+SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{SQL_USER}:{SQL_PASSWD}@{SQL_HOST}:{SQL_PORT}/{DB_NAME}{SQL_CONF}'

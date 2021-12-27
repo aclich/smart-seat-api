@@ -176,8 +176,8 @@ class Logout(Resource):
             # Return status of refresh token.
 
         resp = make_response("success")
-        resp.set_cookie(key="access_token", value="", expires=datetime(1998,12,31))
-        resp.set_cookie(key="refresh_token", value="", expires=datetime(1998,12,31))
+        resp.set_cookie(key="access_token", value="", expires=datetime(1998,12,31), secure=True, samesite=None)
+        resp.set_cookie(key="refresh_token", value="", expires=datetime(1998,12,31), secure=True, samesite=None)
         
         return resp
 
