@@ -101,6 +101,8 @@ class ApiGetRecordData(Resource):
             r_type_map = SeatCategory.get_type_map_reverse()
             data_type = r_type_map[data_type]
             record_data_info = self.data_sevice.get_record_data_info(data_type, seat_id, search_date)
+            if record_data_info['count'] == 0:
+                return {'message':'無資料', 'status':'success'}, 200
             '''
             slider_data include:
             1. records_slider:

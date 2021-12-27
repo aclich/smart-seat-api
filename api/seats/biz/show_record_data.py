@@ -44,7 +44,7 @@ class SearchRecrodDataService(object):
                                            created_date == date) \
                                    .first()
         if record_q is None:
-            raise Exception("查無對應資料!")
+            raise Exception("查無資料!")
         
         return {'seat_id':seat_id, 
                 'seat_name': seat_name, 
