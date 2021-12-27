@@ -93,7 +93,7 @@ class Login(Resource):
             logging.info("Email or password is wrong. " + str(why))
 
             # Return invalid input error.
-            return error.INVALID_INPUT_422("Email or password is wrong")
+            return error.SERVER_ERROR_500(f"{why}")
 
         # Check if user information is none.
         if email is None or password is None:
