@@ -4,6 +4,7 @@
 import logging
 from datetime import datetime, timedelta
 
+from api.conf.config import FRONT_END_DOMAIN
 from flask import g, request, make_response
 from flask_restful import Resource
 from flask import session
@@ -140,8 +141,8 @@ class Login(Resource):
         }
 
         resp = make_response(json.dumps(data))
-        resp.set_cookie(key="access_token", secure=True, samesite='None', value=access_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
-        resp.set_cookie(key="refresh_token", secure=True, samesite='None', value=refresh_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
+        resp.set_cookie(key="access_token", domain=FRONT_END_DOMAIN, secure=True, samesite='None', value=access_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
+        resp.set_cookie(key="refresh_token", domain=FRONT_END_DOMAIN, secure=True, samesite='None', value=refresh_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
         # resp.data = json.dumps(data)
         return resp
         # return {
@@ -176,8 +177,8 @@ class Logout(Resource):
             # Return status of refresh token.
 
         resp = make_response("success")
-        resp.set_cookie(key="access_token", value="", expires=datetime(1998,12,31), secure=True, samesite='None')
-        resp.set_cookie(key="refresh_token", value="", expires=datetime(1998,12,31), secure=True, samesite='None')
+        resp.set_cookie(key="access_token", domain=FRONT_END_DOMAIN, value="", expires=datetime(1998,12,31), secure=True, samesite='None')
+        resp.set_cookie(key="refresh_token", domain=FRONT_END_DOMAIN, value="", expires=datetime(1998,12,31), secure=True, samesite='None')
         
         return resp
 

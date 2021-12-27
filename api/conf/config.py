@@ -25,3 +25,4 @@ SQL_USER = os.environ['SQL_USER']
 SQL_PASSWD = os.environ['SQL_PASSWD']
 SQL_CONF = os.environ['SQL_CONF']
 SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{SQL_USER}:{SQL_PASSWD}@{SQL_HOST}:{SQL_PORT}/{DB_NAME}{SQL_CONF}'
+FRONT_END_DOMAIN = os.environ['FRONT_END_DOMAIN'] if os.environ['FRONT_END_DOMAIN'] != 'localhost' else None
