@@ -63,7 +63,7 @@ class APISmartSeat(Resource):
                                      .filter(SensorSeat.id == c_id) \
                                      .first()
             if seat_q is None:
-                raise error.NOT_FOUND_404('發生錯誤,查無此坐墊!')
+                return error.NOT_FOUND_404('發生錯誤,查無此坐墊!')
             if seat_q.user_id != session.user_id:
                 raise Exception('Not your seats!!')
 
@@ -93,9 +93,9 @@ class APISmartSeat(Resource):
         except Exception as e:
             self.sql_session.rollback()
             message = 'failed'
-            code = 409
+            code = 500
             err_msg = f'{e}'
-        return {'message': message, 'data':'', 'err_msg': err_msg}, code
+        return {'message': message, 'data':None, 'err_msg': err_msg}, code
 
     @login_check
     def delete(self):

@@ -33,18 +33,18 @@ def permission(arg):
                 if data["admin"] < arg:
 
                     # Return if user is not admin.
-                    return error.NOT_ADMIN
+                    return error.NOT_ADMIN()
 
             except ValueError:
                 # The Authorization header is either empty or has no token.
-                return error.HEADER_NOT_FOUND
+                return error.HEADER_NOT_FOUND()
 
             except Exception as why:
                 # Log the error.
                 logging.error(why)
 
                 # If it does not generated return false.
-                return error.INVALID_INPUT_422
+                return error.INVALID_INPUT_422()
 
                 # Return method.
             return f(*args, **kwargs)

@@ -15,7 +15,7 @@ def login_check(view_func):
     def api_auth_wrapper(*args, **kwargs):
         # login checking
         if 'access_token' not in request.cookies:
-            return NOT_LOGIN
+            return NOT_LOGIN()
         access_token = request.cookies.get('access_token')
         try:
             access_token_de = py_jwt.decode(access_token, jwt_secret_key)
@@ -25,7 +25,7 @@ def login_check(view_func):
             setattr(session, 'user_id', user.id)
         except Exception as e:
             print(f'{e}')
-            return NOT_LOGIN
+            return NOT_LOGIN()
 
         return view_func(*args, **kwargs)  # 4
 
