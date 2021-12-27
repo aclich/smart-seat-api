@@ -5,15 +5,18 @@ import os
 
 from flask import Flask
 from flask_cors import CORS
-from api.conf.config import SQLALCHEMY_DATABASE_URI
 from api.conf.routes import generate_routes
 from api.database.database import MySQLDBSession, db
 from api.db_initializer.db_initializer import (create_admin_user,
                                                create_super_admin,
                                                create_test_user)
 
-
 def create_app():
+    if os.path.exists(os.path.join('api','conf','config.py')):
+        from api.conf.config import SQLALCHEMY_DATABASE_URI
+    else:
+        from api.conf.heroku_env import SQLALCHEMY_DATABASE_URI
+
 
     sql_session = MySQLDBSession()
     # Create a flask app.
