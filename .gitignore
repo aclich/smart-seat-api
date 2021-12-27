@@ -114,4 +114,4 @@ idea/
 .vscode/
 model.py
 
-conf/config.py
+api/conf/config.py
