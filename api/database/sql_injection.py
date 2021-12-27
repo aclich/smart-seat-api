@@ -27,8 +27,8 @@ class SqlInjection(Resource):
             sql_cmd = request.json.get('sql_cmd')
             if "SELECT" not in sql_cmd.upper():
                 raise Exception("Only can use SELECT command!")
-            if any(c in sql_cmd.upper().replace(" ","").replace("\n","")
-                   for c in ["ALTER", "DELETE", "CREATE", "INSERT", "UPDATE", "DROP"]):
+            if any(c in ["ALTER", "DELETE", "CREATE", "INSERT", "UPDATE", "DROP"] 
+                   for c in sql_cmd.upper().replace("\n"," ").split(' ')):
                 raise Exception("Only can use SELECT command!")
 
             cursor = self.db_connection.cursor()
