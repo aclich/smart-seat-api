@@ -124,7 +124,7 @@ class SensorRecord(db.Model):
     id = Column(INTEGER, primary_key=True)
     seat_id = Column(ForeignKey('sensor_seats.id'), nullable=False, index=True)
     seat_type = Column(ForeignKey('seat_category.c_id'), nullable=False, index=True)
-    data = Column(JSON, nullable=False)
+    data = Column(String(255), nullable=False)
     sitting_posture = Column(Enum('regular', 'bias_left', 'bias_right', 'cross_left', 'cross_right', 'stand_on'))
     created = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"), comment='Data created time')
 

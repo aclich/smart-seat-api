@@ -6,20 +6,21 @@ import logging
 # from api.database.database import db
 from api.models.models import User
 from werkzeug.security import generate_password_hash
+import os
 
 def create_super_admin(db):
 
     # Check if admin is existed in db.
-    user = User.query.filter_by(email="sa_email@example.com").first()
+    user = User.query.filter_by(email=os.environ['sa_email']).first()
 
     # If user is none.
     if user is None:
 
         # Create admin user if it does not existed.
         user = User(
-            username="sa_username",
-            password=generate_password_hash("sa_password", method='sha256'),
-            email="sa_email@example.com",
+            username=os.environ["sa_username"],
+            password=generate_password_hash(os.environ["sa_password"], method='sha256'),
+            email=os.environ["sa_email"],
             user_role="sa",
         )
 

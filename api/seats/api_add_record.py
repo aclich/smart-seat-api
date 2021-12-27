@@ -68,7 +68,7 @@ class ApiGenerateData(Resource):
             record_dict = {
                 'seat_id': seat_data['id'],
                 'seat_type': seat_data['seat_type'],
-                'data': sensor_data,
+                'data': str(sensor_data),
                 'sitting_posture': sitting_posture,
                 'created': rec_day + timedelta(minutes= i * 5, seconds=random.randint(10,75))
             }
