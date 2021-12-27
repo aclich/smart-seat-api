@@ -7,15 +7,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from flask import current_app
 from flask import _app_ctx_stack
+from api.conf.config import SQLALCHEMY_DATABASE_URI
 
 from sqlalchemy import create_engine
 # Create sql alchemy database object.
 db = SQLAlchemy()
-
-if os.path.exists(os.path.join('api','conf','config.py')):
-    from api.conf.config import SQLALCHEMY_DATABASE_URI
-else:
-    from api.conf.heroku_env import SQLALCHEMY_DATABASE_URI
 
 class MySQLDBSession(object):
     def __init__(self, app=None):

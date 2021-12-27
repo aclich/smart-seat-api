@@ -114,4 +114,4 @@ idea/
 .vscode/
 model.py
 
-api/conf/config.py
+api/conf/local_conf.env
