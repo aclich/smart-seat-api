@@ -8,7 +8,7 @@ from sqlalchemy.sql.schema import MetaData
 from api.conf.token import jwt
 from api.database.database import db
 
-from sqlalchemy import Column, DateTime, ForeignKey, Index, String, text, Enum
+from sqlalchemy import Column, DateTime, ForeignKey, Index, String, text, Enum, JSON
 from sqlalchemy.dialects.mysql import INTEGER
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -124,8 +124,8 @@ class SensorRecord(db.Model):
     id = Column(INTEGER, primary_key=True)
     seat_id = Column(ForeignKey('sensor_seats.id'), nullable=False, index=True)
     seat_type = Column(ForeignKey('seat_category.c_id'), nullable=False, index=True)
-    data = Column(String(255), nullable=False)
-    sitting_posture = Column(Enum('regular', 'bias_left', 'bias_right', 'cross_left', 'corss_right', 'stand_on'))
+    data = Column(JSON, nullable=False)
+    sitting_posture = Column(Enum('regular', 'bias_left', 'bias_right', 'cross_left', 'cross_right', 'stand_on'))
     created = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"), comment='Data created time')
 
     seat = relationship('SensorSeat')
@@ -141,6 +141,24 @@ class SeatCategory(db.Model):
     def get_seat_type_name(c_id: int):
         seat_cate: SeatCategory = SeatCategory.query.filter_by(c_id=c_id).first()
         return seat_cate.type_name
+    
+    @staticmethod
+    def get_type_map():
+        '''id -> name'''
+        type_map = {}
+        seat_cate: [SeatCategory] = SeatCategory.query.all()
+        for q in seat_cate:
+            type_map[q.c_id] = q.type_name
+        return type_map
+    
+    @staticmethod
+    def get_type_map_reverse():
+        '''name -> id'''
+        type_map = {}
+        seat_cate: [SeatCategory] = SeatCategory.query.all()
+        for q in seat_cate:
+            type_map[q.type_name] = q.c_id
+        return type_map
 
 def query_to_dict(query: MetaData):
     res_dict: dict = {}
@@ -151,6 +169,6 @@ def query_to_dict(query: MetaData):
         res_dict.setdefault(c.name, value)
     return res_dict
 
-def get_seat_type_name_by_c_id(c_id: int):
+def get_type_name(c_id: int):
     seat_cate: SeatCategory = SeatCategory.query.filter_by(c_id=c_id).first()
     return seat_cate.type_name

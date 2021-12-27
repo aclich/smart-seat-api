@@ -17,6 +17,9 @@ from api.handlers.UserHandlers import (
 
 from api.database.test_dbsession import TestDBSession
 from api.database.sql_injection import SqlInjection
+from api.seats.api_add_record import ApiGenerateData
+from api.seats.api_delete_record import ApiDeleteRecord
+from api.seats.api_search_record import ApiGetRecordData, ApiGetSeatList, ApiGetSeatRecordList
 from api.seats.seat_servce import APISmartSeat, GetTypeList
 
 def generate_routes(app):
@@ -66,3 +69,9 @@ def generate_routes(app):
     api.add_resource(APISmartSeat, "/seat/manage")
     api.add_resource(GetTypeList, "/seat/get-type-list")
 
+    #Seat Data
+    api.add_resource(ApiGenerateData, "/seat/data/auto-gen")
+    api.add_resource(ApiGetSeatList, "/seat/get-seat-list")
+    api.add_resource(ApiGetSeatRecordList, "/seat/get-record-list/<seat_id>")
+    api.add_resource(ApiGetRecordData, "/seat/get-data/<data_type>/<seat_id>/<search_date>")
+    api.add_resource(ApiDeleteRecord, "/seat/delete-data")
