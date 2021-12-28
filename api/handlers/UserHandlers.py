@@ -4,6 +4,8 @@
 import logging
 from datetime import datetime, timedelta
 
+from sqlalchemy.exc import OperationalError
+
 from api.conf.config import FRONT_END_DOMAIN
 from flask import g, request, make_response
 from flask_restful import Resource
@@ -87,6 +89,8 @@ class Login(Resource):
                 request.json.get("email").strip(),
                 request.json.get("password").strip(),
             )
+        except OperationalError as e:
+            return error.SERVER_ERROR_500("連線不穩定，請從新在試一次!")
 
         except Exception as why:
 
