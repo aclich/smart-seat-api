@@ -14,7 +14,7 @@ from api.db_initializer.db_initializer import (create_admin_user,
 from api.error.errors import BaseError
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, resources={r"/.*": {"origins": ["http://localhost:8081","https://aclich.github.io/"]}})
+CORS(app, supports_credentials=True, resources={r"/.*": {"origins": ["http://localhost:8080", "https://aclich.github.io"]}})
 
 sql_session = MySQLDBSession()
 # CORS(app, resources={r"/.*": {"origins": ["http://127.0.0.1","http://www.example.com"]}}) 
