@@ -11,7 +11,7 @@ class SqlInjection(Resource):
         try:
             mysqldb = pymysql.connect(
                 host= SQL_HOST,
-                port= SQL_PORT,
+                port= int(SQL_PORT),
                 user=SQL_USER,
                 passwd=SQL_PASSWD,
                 database=DB_NAME
