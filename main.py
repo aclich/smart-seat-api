@@ -7,7 +7,7 @@ from flask import Flask, current_app
 from flask_cors import CORS
 from api.conf.routes import generate_routes
 from api.database.database import MySQLDBSession, db
-from api.conf.config import SQLALCHEMY_DATABASE_URI
+from api.conf.config import SQLALCHEMY_DATABASE_URI, CORS_ALLOWED_ORIGINS
 from werkzeug.middleware.proxy_fix import ProxyFix
 from api.db_initializer.db_initializer import (create_admin_user,
                                                create_super_admin,
@@ -15,7 +15,7 @@ from api.db_initializer.db_initializer import (create_admin_user,
 from api.error.errors import BaseError
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, resources={r"/.*": {"origins": ["http://localhost:8080", "https://aclich.github.io"]}})
+CORS(app, supports_credentials=True, resources={r"/.*": {"origins": [CORS_ALLOWED_ORIGINS]}})
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1)
 sql_session = MySQLDBSession()
 # CORS(app, resources={r"/.*": {"origins": ["http://127.0.0.1","http://www.example.com"]}}) 
