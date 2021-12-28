@@ -1,5 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from http import HTTPStatus
+
+
+class BaseError(Exception):
+    description = None
+    code = None
+    data = None
+    http_status_code: HTTPStatus.INTERNAL_SERVER_ERROR
+
+    def __init__(self, description, code=None, data=None):
+        Exception.__init__(self, description)
+        self.description = description
+        self.code = code
+        self.data = data
+
 
 SERVER_ERROR_500 = lambda message="An error occured.": ({"message": message}, 500)
 NOT_FOUND_404 = lambda message="Resource could not be found.": ({"message": message}, 404)
