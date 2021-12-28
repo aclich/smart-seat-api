@@ -1,13 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from logging import error
 from flask import session, current_app
 from flask.globals import request
 from api.conf.token import jwt_secret_key
 from functools import wraps
-from api.error.errors import NOT_LOGIN
+from api.error.errors import NOT_LOGIN, SERVER_ERROR_500
 from api.models.models import User
 import jwt as py_jwt
-
+from sqlalchemy.exc import OperationalError
 
 
 def login_check(view_func):
@@ -23,6 +24,10 @@ def login_check(view_func):
             user: User = User.query.filter_by(email = access_token_de['email']).first()
             setattr(session, 'user_email', access_token_de['email'])
             setattr(session, 'user_id', user.id)
+        except OperationalError as e:
+            if 'Lost connection' in f'{e}':
+                return SERVER_ERROR_500('連線不穩定，請重新整理後，再執行一次!')
+
         except Exception as e:
             print(f'{e}')
             return NOT_LOGIN()
