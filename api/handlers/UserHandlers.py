@@ -6,10 +6,10 @@ from datetime import datetime, timedelta
 
 from sqlalchemy.exc import OperationalError
 
-from api.conf.config import FRONT_END_DOMAIN
 from flask import g, request, make_response
 from flask_restful import Resource
 from flask import session
+from sqlalchemy.sql.expression import true
 import api.error.errors as error
 from api.conf.auth import login_check
 from api.conf.token import auth, refresh_jwt
@@ -115,24 +115,23 @@ class Login(Resource):
             return error.INVALID_INPUT_422("Email or Password wrong!")
 
         if user.user_role == "user":
-            permission = 0
             # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 1 or 0.
-            access_token = user.generate_auth_token(0)
+            permission = 0
 
         # If user is admin.
         elif user.user_role == "admin":
-            permission = 1
             # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 1 or 0.
-            access_token = user.generate_auth_token(1)
+            permission = 1
 
         # If user is super admin.
         elif user.user_role == "sa":
-            permission = 2
             # Generate access token. This method takes boolean value for checking admin or normal user. Admin: 2, 1, 0.
-            access_token = user.generate_auth_token(2)
+            permission = 2
 
         else:
             return error.INVALID_INPUT_422
+
+        access_token = user.generate_auth_token(permission)
 
         # Generate refresh token.
         refresh_token = refresh_jwt.dumps({"email": email})
@@ -144,9 +143,11 @@ class Login(Resource):
             'permission': permission
         }
 
+        secure = False if request.environ.get('wsgi.url_scheme', 'http') == 'http' else True
+        samesite = 'None' if secure else 'Lax'
         resp = make_response(json.dumps(data))
-        resp.set_cookie(key="access_token", secure=True, samesite='None', value=access_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
-        resp.set_cookie(key="refresh_token", secure=True, samesite='None', value=refresh_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
+        resp.set_cookie(key="access_token", secure=secure, samesite=samesite, value=access_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
+        resp.set_cookie(key="refresh_token", secure=secure, samesite=samesite, value=refresh_token.decode(), expires=datetime.utcnow()+timedelta(hours=4, minutes=0))
         # resp.data = json.dumps(data)
         return resp
         # return {
@@ -179,10 +180,11 @@ class Logout(Resource):
             db.session.commit()
 
             # Return status of refresh token.
-
+        secure = False if request.environ.get('wsgi.url_scheme', 'http') == 'http' else True
+        samesite = 'None' if secure else 'Lax'
         resp = make_response("success")
-        resp.set_cookie(key="access_token", value="", expires=datetime(1998,12,31), secure=True, samesite='None')
-        resp.set_cookie(key="refresh_token", value="", expires=datetime(1998,12,31), secure=True, samesite='None')
+        resp.set_cookie(key="access_token", value="", expires=datetime(1998,12,31), secure=secure, samesite=samesite)
+        resp.set_cookie(key="refresh_token", value="", expires=datetime(1998,12,31), secure=secure, samesite=samesite)
         
         return resp
 
