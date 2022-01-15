@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask_restful import Api
+from api.admin.api_user_management import ApiUserManagement
 
 from api.handlers.UserHandlers import (
     DataAdminRequired,
@@ -21,6 +22,7 @@ from api.seats.api_add_record import ApiGenerateData
 from api.seats.api_delete_record import ApiDeleteRecord
 from api.seats.api_search_record import ApiGetRecordData, ApiGetSeatList, ApiGetSeatRecordList
 from api.seats.seat_servce import APISmartSeat, GetTypeList
+from api.api_dashboard import ApiDashboard
 
 def generate_routes(app):
 
@@ -75,3 +77,9 @@ def generate_routes(app):
     api.add_resource(ApiGetSeatRecordList, "/seat/get-record-list/<seat_id>")
     api.add_resource(ApiGetRecordData, "/seat/get-data/<data_type>/<seat_id>/<search_date>")
     api.add_resource(ApiDeleteRecord, "/seat/delete-data")
+
+    #user_management
+    api.add_resource(ApiUserManagement, '/admin/user_management')
+
+    #dashboard
+    api.add_resource(ApiDashboard, '/dashboard')

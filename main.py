@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
-
 from flask import Flask, current_app
 from flask_cors import CORS
 from api.conf.routes import generate_routes

@@ -166,6 +166,8 @@ def query_to_dict(query: MetaData):
         value = getattr(query, c.name, None)
         if isinstance(value, datetime):
             value = datetime.strftime(value, '%Y-%m-%d %H:%M:%S')
+        if c.name == 'password':
+            value = '******'
         res_dict.setdefault(c.name, value)
     return res_dict
 
