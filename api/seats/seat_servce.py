@@ -44,7 +44,7 @@ class APISmartSeat(Resource):
             self.sql_session.flush()
         except IntegrityError as e:
             logging.log(1,f'{e}')
-            return error.ALREADY_EXIST(f'坐墊名稱重複!, {e}')
+            return error.ALREADY_EXIST(f'坐墊名稱重複!')
         except DataError as e:
             return error.INVALID_INPUT_422('輸入資料長度過長!(不能超過255個字元)')
 

@@ -19,7 +19,6 @@ class ApiUserManagement(Resource):
     def __init__(self) -> None:
         super().__init__()
         self.sql_session = current_app.sql_session
-
     
     @login_check
     @role_required.permission(1)

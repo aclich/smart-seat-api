@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask_restful import Api
+from api.admin.api_seat_type_management import ApiSeatTypeManagement
 from api.admin.api_user_management import ApiUserManagement
 
 from api.handlers.UserHandlers import (
@@ -80,6 +81,9 @@ def generate_routes(app):
 
     #user_management
     api.add_resource(ApiUserManagement, '/admin/user_management')
+
+    #seat_type_management
+    api.add_resource(ApiSeatTypeManagement,'/admin/seat_type_management')
 
     #dashboard
     api.add_resource(ApiDashboard, '/dashboard')
