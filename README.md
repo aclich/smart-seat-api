@@ -1,5 +1,5 @@
 ### INSTALLATION
-* Python 3 is required.
+* Python 3.8 is required.
 
 Pull project and install requirements to virtual environment (*[https://pypi.org/project/virtualenv/]()*). Then run.
 ```
