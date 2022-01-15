@@ -64,7 +64,8 @@ class ApiGenerateData(Resource):
                                              minutes=random.randint(0,59),
                                              seconds=random.randint(0,59))
         for i in range(random.randint(5,55)):
-            sitting_posture, sensor_data = random.choice(list(FD_MAP[seat_data['seat_type']].items()))
+            seat_type = seat_data['seat_type'] if seat_data['seat_type'] < 3 else 1
+            sitting_posture, sensor_data = random.choice(list(FD_MAP[seat_type].items()))
             record_dict = {
                 'seat_id': seat_data['id'],
                 'seat_type': seat_data['seat_type'],
