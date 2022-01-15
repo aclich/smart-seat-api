@@ -1,10 +1,20 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+from distutils.sysconfig import customize_compiler
+from email import message
+import re
 from api.conf.config import DB_NAME, SQL_HOST, SQL_PASSWD, SQL_PORT, SQL_USER
 from flask import request
 from flask_restful import Resource
 from api.conf.auth import login_check
 from api.roles import role_required
 import pymysql
+
+def post_process(val):
+    if isinstance(val, datetime):
+        val = datetime.strftime(val, "%Y-%m-%d %H:%M:%S")
+    return val
+
 
 class SqlInjection(Resource):
     def __init__(self) -> None:
@@ -33,8 +43,12 @@ class SqlInjection(Resource):
 
             cursor = self.db_connection.cursor()
             cursor.execute(sql_cmd)
-            result = cursor.fetchall()
+            title = [col[0] for col in cursor.description]
+            data = cursor.fetchall()
+            result = [{title[idx]: post_process(val) for idx, val in enumerate(r)} for r in data]
+            message = 'OK'
         except Exception as e:
-            result = f"Error occur!, error message:{e}"
+            result=""
+            message = f"Error occur!, error message:{e}"
 
-        return {"message": f"{result}"}, 200
+        return {"message": message, 'data': result}, 200
