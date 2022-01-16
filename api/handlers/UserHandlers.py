@@ -129,7 +129,7 @@ class Login(Resource):
             permission = 2
 
         else:
-            return error.INVALID_INPUT_422
+            return error.INVALID_INPUT_422()
 
         access_token = user.generate_auth_token(permission)
 
