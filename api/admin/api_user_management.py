@@ -1,18 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import logging
-from datetime import datetime, timedelta
-from typing import List
-
-from flask import session, request, make_response, current_app
+from flask import request, current_app
 from flask_restful import Resource
-import api.error.errors as error
 from api.conf.auth import login_check
-from api.models.models import SeatCategory, SensorSeat, SensorRecord, User, query_to_dict
+from api.models.models import User, query_to_dict
 from api.roles import role_required
-from sqlalchemy.exc import IntegrityError, DataError
-import json
 
 
 class ApiUserManagement(Resource):

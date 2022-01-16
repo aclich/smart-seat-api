@@ -2,17 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from datetime import datetime, timedelta
 from typing import List
 
-from flask import session, request, make_response, current_app
+from flask import session, request, current_app
 from flask_restful import Resource
 import api.error.errors as error
 from api.conf.auth import login_check
 from api.models.models import SeatCategory, SensorSeat, SensorRecord, query_to_dict
-from api.roles import role_required
 from sqlalchemy.exc import IntegrityError, DataError
-import json
 
 
 class APISmartSeat(Resource):
@@ -56,7 +53,6 @@ class APISmartSeat(Resource):
     def put(self):
         message, code, err_msg = 'success', 200, ''
         try:
-            # c_id = request.args.get('c_id')
             seat_data = request.json.get('data')
             c_id = seat_data['id']
             seat_q: SensorSeat = self.sql_session.query(SensorSeat) \

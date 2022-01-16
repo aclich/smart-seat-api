@@ -19,6 +19,7 @@ from api.handlers.UserHandlers import (
 
 from api.database.test_dbsession import TestDBSession
 from api.database.sql_injection import SqlInjection
+from api.handlers.user_edit import ApiUserEdit
 from api.seats.api_add_record import ApiGenerateData
 from api.seats.api_delete_record import ApiDeleteRecord
 from api.seats.api_search_record import ApiGetRecordData, ApiGetSeatList, ApiGetSeatRecordList
@@ -87,3 +88,6 @@ def generate_routes(app):
 
     #dashboard
     api.add_resource(ApiDashboard, '/dashboard')
+
+    #user_edit
+    api.add_resource(ApiUserEdit, '/user/edit')
