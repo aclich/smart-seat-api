@@ -89,8 +89,6 @@ class Login(Resource):
                 request.json.get("email").strip(),
                 request.json.get("password").strip(),
             )
-        except OperationalError as e:
-            return error.SERVER_ERROR_500("連線不穩定，請從新在試一次!")
 
         except Exception as why:
 
@@ -103,9 +101,12 @@ class Login(Resource):
         # Check if user information is none.
         if email is None or password is None:
             return error.INVALID_INPUT_422 ("Please enter Email and password")
-
-        # Get user if it is existed.
-        user: User = User.query.filter_by(email=email).first()
+        try:
+            # Get user if it is existed.
+            user: User = User.query.filter_by(email=email).first()
+        
+        except OperationalError as e:
+            return error.SERVER_ERROR_500("連線不穩定，請重新在試一次!")
 
         # Check if user is not existed.
         if user is None:

@@ -40,7 +40,7 @@ class SqlInjection(Resource):
             if any(c in ["ALTER", "DELETE", "CREATE", "INSERT", "UPDATE", "DROP"] 
                    for c in sql_cmd.upper().replace("\n"," ").split(' ')):
                 raise Exception("Only can use SELECT command!")
-
+            sql_cmd = " ".join(sql_cmd.split())
             cursor = self.db_connection.cursor()
             cursor.execute(sql_cmd)
             title = [col[0] for col in cursor.description]
