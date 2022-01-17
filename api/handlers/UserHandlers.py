@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 from sqlalchemy.exc import OperationalError
 
@@ -67,7 +67,7 @@ class Register(Resource):
             return error.INVALID_INPUT_422('The password needs at least 6 characters')
 
         # Create a new user.
-        user = User(username=username, password=generate_password_hash(password, "sha256"), email=email)
+        user = User(username=username, password=generate_password_hash(password, "sha256"), email=email, created=datetime.now())
 
         # Add user to session.
         db.session.add(user)

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 import logging
 from typing import List
 
@@ -34,7 +35,8 @@ class APISmartSeat(Resource):
                 'user_id': session.user_id,
                 'seat_name': seat_data['seat_name'],
                 'seat_type': int(seat_data['seat_type']),
-                'note': seat_data['note']
+                'note': seat_data['note'],
+                'created': datetime.now()
             }
             new_seat = SensorSeat(**new_seat_dict)
             self.sql_session.add(new_seat)
