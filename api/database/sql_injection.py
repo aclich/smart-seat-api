@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import date, datetime
 from distutils.sysconfig import customize_compiler
 from email import message
 import re
@@ -13,6 +13,8 @@ import pymysql
 def post_process(val):
     if isinstance(val, datetime):
         val = datetime.strftime(val, "%Y-%m-%d %H:%M:%S")
+    elif isinstance(val, date):
+        val = date.strftime(val, "%Y-%m-%d")
     return val
 
 
