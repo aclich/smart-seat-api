@@ -26,7 +26,7 @@ def login_check(view_func):
             setattr(session, 'user_id', user.id)
         except OperationalError as e:
             if 'Lost connection' in f'{e}':
-                return SERVER_ERROR_500('連線不穩定，請重新整理後，再執行一次!')
+                return SERVER_ERROR_500('連線不穩定，請再執行一次，或重新整理!')
 
         except Exception as e:
             print(f'{e}')
