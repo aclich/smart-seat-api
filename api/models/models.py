@@ -8,7 +8,7 @@ from sqlalchemy.sql.schema import MetaData
 from api.conf.token import jwt
 from api.database.database import db
 
-from sqlalchemy import Column, DateTime, ForeignKey, Index, String, text, Enum, JSON
+from sqlalchemy import Column, DateTime, ForeignKey, Index, String, text, Enum, JSON, Integer
 from sqlalchemy.dialects.mysql import INTEGER
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -125,7 +125,10 @@ class SensorRecord(db.Model):
     seat_id = Column(ForeignKey('sensor_seats.id'), nullable=False, index=True)
     seat_type = Column(ForeignKey('seat_category.c_id'), nullable=False, index=True)
     data = Column(String(255), nullable=False)
-    sitting_posture = Column(Enum('regular', 'bias_left', 'bias_right', 'cross_left', 'cross_right', 'stand_on'))
+    sitting_posture = Column(Enum('regular', 'bias_left', 'bias_right', 'cross_left', 'cross_right', 'stand_on', '1', '2', '3', '4', '5', '6', '7', '8'))
+    gender = Column(Enum('1', '2'), comment='1: Male, 2: Female')
+    height = Column(Integer)
+    weight = Column(Integer)
     created = Column(DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP"), comment='Data created time')
 
     seat = relationship('SensorSeat')

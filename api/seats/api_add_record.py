@@ -44,6 +44,56 @@ class ApiAddRecord(Resource):
     def post(self):
         pass
 
+class ApiUploadRecordJson(Resource):
+    def __init__(self) -> None:
+        super().__init__()
+        self.sql_session = current_app.sql_session
+
+    @login_check
+    def post(self):
+        try:
+            req_body = request.json
+            if not isinstance(req_body, list):
+                return {'message': "error", 'data': 'upload failed, json data should be list'}
+            suc, bad, err_data = self._upload_json_record(req_body)
+            return {"message": "success", "data": f"uploaded {suc} data, failed {bad} data", "err_msg": err_data}, 200
+        
+        except Exception as e:
+            return error.SERVER_ERROR_500(f'{e}')
+    
+    def _upload_json_record(self, json_data):
+            err_line = []
+            for record in json_data:
+                try:
+                    self.sql_session.add(
+                        SensorRecord(
+                            seat_id=record['seat_id'],
+                            seat_type=record['seat_type'],
+                            data=str(record['data']),
+                            sitting_posture=record['sit_pos'],
+                            gender=record['gender'],
+                            height=record['height'],
+                            weight=record['weight'],
+                            created=datetime.strptime(record['time'], "%Y%m%d %H:%M:%S")),
+                        )
+                except KeyError as e:
+                    err_line.append({'data': record, "err_msg": f"missing key: {e}"})
+                except Exception as e:
+                    err_line.append({'data': record, "err_msg": f"data error: {e}"})
+            try:
+                self.sql_session.flush()
+            except IntegrityError as e:
+                raise error.SERVER_ERROR_500("與資料庫連線不穩定")
+            
+            except Exception as e:
+                self.sql_session.rollback()
+                
+            
+            return len(json_data) - len(err_line), len(err_line), err_line
+
+        
+
+        
 class ApiGenerateData(Resource):
     def __init__(self) -> None:
         super().__init__()
