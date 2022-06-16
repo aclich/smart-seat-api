@@ -65,8 +65,7 @@ class ApiUploadRecordJson(Resource):
             err_line = []
             for record in json_data:
                 try:
-                    self.sql_session.add(
-                        SensorRecord(
+                    new_record = SensorRecord(
                             seat_id=record['seat_id'],
                             seat_type=record['seat_type'],
                             data=str(record['data']),
@@ -74,8 +73,13 @@ class ApiUploadRecordJson(Resource):
                             gender=record['gender'],
                             height=record['height'],
                             weight=record['weight'],
-                            created=datetime.strptime(record['time'], "%Y%m%d %H:%M:%S")),
+                            created=datetime.strptime(record['time'], "%Y%m%d %H:%M:%S")
                         )
+                    # query = SensorRecord.query.filter_by(new_record)
+                    # if query:
+                    #     raise Exception("資料重複")
+
+                    self.sql_session.add(new_record)
                 except KeyError as e:
                     err_line.append({'data': record, "err_msg": f"missing key: {e}"})
                 except Exception as e:
