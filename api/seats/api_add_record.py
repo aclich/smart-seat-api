@@ -70,7 +70,7 @@ class ApiUploadRecordJson(Resource):
                             seat_type=record['seat_type'],
                             data=str(record['data']),
                             sitting_posture=record['sit_pos'],
-                            gender=record['gender'],
+                            gender=str(record['gender']),
                             height=record['height'],
                             weight=record['weight'],
                             created=datetime.strptime(record['time'], "%Y%m%d %H:%M:%S")
@@ -87,10 +87,11 @@ class ApiUploadRecordJson(Resource):
             try:
                 self.sql_session.flush()
             except IntegrityError as e:
-                raise error.SERVER_ERROR_500("與資料庫連線不穩定")
+                raise Exception("與資料庫連線不穩定")
             
             except Exception as e:
                 self.sql_session.rollback()
+                raise Exception(f"{e}")
                 
             
             return len(json_data) - len(err_line), len(err_line), err_line
