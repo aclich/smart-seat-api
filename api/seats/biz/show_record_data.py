@@ -102,6 +102,7 @@ class SearchRecrodDataService(object):
             'cross_right': '右腳翹二郎腿',
             'cross_left': '左腳翹二郎腿',
             'stand_on': '雙腳在椅子上',
+            '0': '空',
             '1': '標準',
             '2': '偏左',
             '3': '偏右',

@@ -125,7 +125,7 @@ class SensorRecord(db.Model):
     seat_id = Column(ForeignKey('sensor_seats.id'), nullable=False, index=True)
     seat_type = Column(ForeignKey('seat_category.c_id'), nullable=False, index=True)
     data = Column(String(255), nullable=False)
-    sitting_posture = Column(Enum('regular', 'bias_left', 'bias_right', 'cross_left', 'cross_right', 'stand_on', '1', '2', '3', '4', '5', '6', '7', '8'))
+    sitting_posture = Column(Enum('regular', 'bias_left', 'bias_right', 'cross_left', 'cross_right', 'stand_on', '0', '1', '2', '3', '4', '5', '6', '7', '8'))
     gender = Column(Enum('1', '2'), comment='1: Male, 2: Female')
     height = Column(Integer)
     weight = Column(Integer)
