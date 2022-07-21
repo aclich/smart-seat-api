@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 from datetime import date, datetime, timedelta
-from distutils.sysconfig import customize_compiler
-from email import message
-import re
 from api.conf.config import DB_NAME, SQL_HOST, SQL_PASSWD, SQL_PORT, SQL_USER
 from flask import request
 from flask_restful import Resource
