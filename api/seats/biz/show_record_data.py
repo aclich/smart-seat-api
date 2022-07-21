@@ -101,7 +101,16 @@ class SearchRecrodDataService(object):
             'bias_left': '偏左',
             'cross_right': '右腳翹二郎腿',
             'cross_left': '左腳翹二郎腿',
-            'stand_on': '雙腳在椅子上'
+            'stand_on': '雙腳在椅子上',
+            '0': '空',
+            '1': '標準',
+            '2': '偏左',
+            '3': '偏右',
+            '4': '翹右腳',
+            '5': '翹左腳',
+            '6': '翹右二郎腿',
+            '7': '翹左二郎腿',
+            '8': '後仰'
         }
         created_date = func.date(SensorRecord.created).label('created_date')
         data_count = func.count(SensorRecord.data).label('data_count')

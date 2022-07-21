@@ -228,7 +228,7 @@ class RefreshToken(Resource):
 
 
 class ResetPassword(Resource):
-    @auth.login_required
+    @login_check
     def post(self):
 
         # Get old and new passwords.
@@ -254,7 +254,7 @@ class ResetPassword(Resource):
 
 
 class UsersData(Resource):
-    @auth.login_required
+    @login_check
     @role_required.permission(2)
     def get(self):
         try:
@@ -293,7 +293,7 @@ class UsersData(Resource):
             user_schema = UserSchema(many=True)
 
             # Get json data
-            data, errors = user_schema.dump(users)
+            data = user_schema.dump(users)
 
             # Return json data from db.
             return data
@@ -319,7 +319,7 @@ class DataUserRequired(Resource):
 
 
 class DataAdminRequired(Resource):
-    @auth.login_required
+    @login_check
     @role_required.permission(1)
     def get(self):
 
@@ -327,7 +327,7 @@ class DataAdminRequired(Resource):
 
 
 class DataSuperAdminRequired(Resource):
-    @auth.login_required
+    @login_check
     @role_required.permission(2)
     def get(self):
 
