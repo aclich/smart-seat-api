@@ -80,8 +80,6 @@ class ApiUploadRecordJson(Resource):
                     #     raise Exception("資料重複")
 
                     self.sql_session.add(new_record)
-                except IntegrityError as e:
-                    err_line.append({'data': record, 'err_msg': f'Data error:{e}'}) 
                 except KeyError as e:
                     err_line.append({'data': record, "err_msg": f"missing key: {e}"})
                 except Exception as e:
@@ -89,8 +87,8 @@ class ApiUploadRecordJson(Resource):
             try:
                 self.sql_session.flush()
             except IntegrityError as e:
-                print(f'{e.__class__.__name__}: {e}')
-                raise Exception(f"與資料庫連線不穩定 {e}")
+                err_msg = f"查無seat_id: {json_data[0]['saet_id']}" \
+                if "a foreign key constraint fails" in f'{e}' else f'與資料庫連線不穩定 {e}'
             
             except Exception as e:
                 self.sql_session.rollback()
