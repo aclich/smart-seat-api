@@ -87,7 +87,9 @@ class ApiUploadRecordJson(Resource):
             try:
                 self.sql_session.flush()
             except IntegrityError as e:
-                raise Exception("與資料庫連線不穩定")
+                err_msg = f"查無seat_id: {json_data[0]['seat_id']}" \
+                if "a foreign key constraint fails" in f'{e}' else f'與資料庫連線不穩定 {e}'
+                raise Exception(err_msg)
             
             except Exception as e:
                 self.sql_session.rollback()
